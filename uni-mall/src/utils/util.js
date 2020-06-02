@@ -1,5 +1,5 @@
 
-const API_BASE_URL = 'https://fly2you.cn/platform/api/';
+const API_BASE_URL = 'https://localhost:8080/platform-framework/api/';
 /**
  * 封封微信的的request
  */

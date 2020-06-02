@@ -5,9 +5,14 @@
     "versionName" : "ColorUi for UniApp 2.1.4",
     "versionCode" : 214,
     "transformPx" : false,
+    "uniStatistics" : {
+        "enable" : false //全局关闭  
+    },
     "app-plus" : {
         /* 5+App特有相关 */
-        "modules" : {},
+        "modules" : {
+            "OAuth" : {}
+        },
         /* 模块配置 */
         "distribute" : {
             /* 应用发布信息 */
@@ -40,7 +45,15 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "",
+                        "appsecret" : "",
+                        "UniversalLinks" : ""
+                    }
+                }
+            }
         }
     },
     /* SDK配置 */

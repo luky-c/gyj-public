@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiUserAccountMapper">
+
+    <resultMap type="com.platform.entity.UserAccountVo" id="userAccountMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="linkId" column="link_id"/>
+        <result property="category" column="category"/>
+        <result property="integraltype" column="integraltype"/>
+        <result property="amount" column="amount"/>
+        <result property="balance" column="balance"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="settlementRate" column="settlement_rate"/>
+        <result property="status" column="status"/>
+        <result property="mark" column="mark"/>
+        <result property="pm" column="pm"/>
+        <result property="succsign" column="succ_record"/>
+    </resultMap>
+
+
+    <select id="queryObject" resultType="com.platform.entity.UserAccountVo">
+		select
+			`id`,
+			`title`,
+			`user_id`,
+			`category`,
+			`integraltype`,
+			`amount`,
+			`balance`,
+			`settlement_rate`,
+			`status`,
+			`mark`,
+            `pm`,
+			`succ_record`
+		from nideshop_user_account
+		where id = #{id}
+	</select>
+
+
+
+    <select id="queryListByUserid" resultType="com.platform.entity.UserAccountVo">
+		select
+			`id`,
+			`title`,
+			`user_id`,
+			`category`,
+			`integraltype`,
+			`amount`,
+			`balance`,
+			`settlement_rate`,
+			`status`,
+			`mark`,
+            `pm`,
+			`succ_record`
+		from nideshop_user_account
+		where user_id = #{userId}
+	</select>
+
+
+    <select id="queryListByMonth" resultType="com.platform.entity.RankVo">
+        select sum(a.balance) as sumBalance,a.user_id as userId,b.avatar as avatar,b.nickname as nickname
+        from nideshop_user_account a
+        left join nideshop_user b on a.user_id = b.id
+        where month(a.create_time)=month(now())
+        and year(a.create_time)=year(now()) and a.integraltype='donation' and a.pm=1
+        group by a.user_id order by sum(a.balance) desc
+    </select>
+
+    <select id="queryListByWeek" resultType="com.platform.entity.RankVo">
+        select sum(a.balance) as sumBalance,a.user_id as userId,b.avatar as avatar,b.nickname as nickname
+        from nideshop_user_account a
+        left join nideshop_user b on a.user_id = b.id
+        where week(a.create_time)=week(now())
+        and a.integraltype='donation' and a.pm=1
+        group by a.user_id order by sum(a.balance) desc
+    </select>
+
+
+    <select id="queryList" resultMap="userAccountMap">
+        select
+        `id`,
+        `title`,
+        `user_id`,
+        `category`,
+        `integraltype`,
+        `amount`,
+        `balance`,
+        `create_time`,
+        `modify_time`,
+        `settlement_rate`,
+        `status`,
+        `mark`,
+        `pm`,
+        `succ_record`
+        from nideshop_user_account
+        where user_id = #{userId}
+        <if test="integraltype != null ">
+            and integraltype=#{integraltype}
+        </if>
+        <if test="category != null ">
+            and category=#{category}
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from nideshop_user_account
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+
+
+    <insert id="save" parameterType="com.platform.entity.UserAccountVo" useGeneratedKeys="true" keyProperty="id">
+		insert into nideshop_user_account(
+        `title`,
+        `user_id`,
+        `link_id`,
+        `category`,
+        `integraltype`,
+        `amount`,
+        `balance`,
+        `create_time`,
+        `modify_time`,
+        `settlement_rate`,
+        `status`,
+        `mark`,
+        `pm`,
+		`succ_record`
+        )
+		values(
+		    #{title},
+			#{userId},
+			#{linkId},
+			#{category},
+			#{integraltype},
+			#{amount},
+			#{balance},
+			#{createTime},
+			#{modifyTime},
+			#{settlementRate},
+			#{status},
+			#{mark},
+            #{pm},
+		    #{succsign}
+			)
+	</insert>
+
+    <update id="update" parameterType="com.platform.entity.UserAccountVo">
+        update nideshop_user_account
+        <set>
+            <if test="settlementRate != null">`settlement_rate` = #{settlementRate}, </if>
+            <if test="status != null">`status` = #{status}, </if>
+            <if test="mark != null">`mark` = #{mark}, </if>
+            <if test="amount != null">`amount` = #{amount}, </if>
+            <if test="balance != null">`balance` = #{balance}, </if>
+            <if test="succsign != null">`succ_record` = #{succsign}, </if>
+            <if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+		delete from nideshop_user_account where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from nideshop_user_account where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

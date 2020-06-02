@@ -19,6 +19,11 @@
         <result property="register_ip" column="register_ip"/>
         <result property="avatar" column="avatar"/>
         <result property="weixin_openid" column="weixin_openid"/>
+        <result property="is_social_worker" column="is_socialworker"/>
+        <result property="social_number" column="social_number"/>
+        <result property="task_integral" column="task_integral"/>
+        <result property="deduction_integral" column="deduction_integral"/>
+        <result property="donation_integral" column="donation_integral"/>
     </resultMap>
 
     <select id="queryObject" resultMap="userMap">
@@ -70,7 +75,12 @@
 			`mobile`,
 			`register_ip`,
 			`avatar`,
-			`weixin_openid`
+			`weixin_openid`,
+            `is_socialworker`,
+			`social_number`,
+			`task_integral`,
+            `deduction_integral`,
+			`donation_integral`
 		)
 		values
 		(
@@ -86,7 +96,12 @@
 			#{mobile},
 			#{register_ip},
 			#{avatar},
-			#{weixin_openid}
+			#{weixin_openid},
+            #{is_social_worker},
+            #{social_number},
+			#{task_integral},
+            #{deduction_integral},
+			#{donation_integral}
 		)
 	</insert>
 
@@ -105,7 +120,12 @@
             <if test="mobile != null">`mobile` = #{mobile},</if>
             <if test="register_ip != null">`register_ip` = #{register_ip},</if>
             <if test="avatar != null">`avatar` = #{avatar},</if>
-            <if test="weixin_openid != null">`weixin_openid` = #{weixin_openid}</if>
+            <if test="weixin_openid != null">`weixin_openid` = #{weixin_openid},</if>
+            <if test="is_social_worker != null">`is_socialworker` = #{is_social_worker},</if>
+            <if test="social_number != null">`social_number` = #{social_number},</if>
+            <if test="task_integral != null">`task_integral` = #{task_integral},</if>
+            <if test="deduction_integral != null">`deduction_integral` = #{deduction_integral},</if>
+            <if test="donation_integral != null">`donation_integral` = #{donation_integral},</if>
         </set>
         where id = #{userId}
     </update>

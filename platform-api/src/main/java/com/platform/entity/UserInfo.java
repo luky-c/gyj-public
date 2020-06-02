@@ -1,6 +1,8 @@
 package com.platform.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 
 /**
@@ -61,4 +63,5 @@ public class UserInfo implements Serializable {
     public void setProvince(String province) {
         this.province = province;
     }
+
 }

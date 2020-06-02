@@ -2,6 +2,8 @@ package com.platform.dao;
 
 import com.platform.entity.UserLevelVo;
 
+import java.util.List;
+
 /**
  * 商城_用户级别
  *
@@ -12,4 +14,5 @@ import com.platform.entity.UserLevelVo;
  */
 public interface ApiUserLevelMapper extends BaseDao<UserLevelVo> {
 
+    List<UserLevelVo> queryList();
 }

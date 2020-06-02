@@ -8,16 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Service实现类
- *
- * @author lipengjun
- * @email 939961241@qq.com
- * @date 2018-11-07 11:04:20
- */
+
 @Service
 public class ApiHelpIssueService {
-    @Autowired
+   @Autowired
     private ApiHelpIssueMapper helpIssueDao;
 
     public HelpIssueVo queryObject(Integer id) {

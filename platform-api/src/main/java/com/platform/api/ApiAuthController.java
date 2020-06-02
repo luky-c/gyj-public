@@ -10,8 +10,10 @@ import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.FullUserInfo;
+import com.platform.entity.UserAccountVo;
 import com.platform.entity.UserInfo;
 import com.platform.entity.UserVo;
+import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,9 +55,11 @@ public class ApiAuthController extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ApiUserAccountService userAccountService;
 
     /**
-     * 登录
+     * 登录APIUserAccount
      */
     @IgnoreAuth
     @PostMapping("login")
@@ -82,6 +87,7 @@ public class ApiAuthController extends ApiBaseAction {
         JSONObject jsonParam = this.getJsonRequest();
         FullUserInfo fullUserInfo = null;
         String code = "";
+        UserAccountVo useraccountentity= new UserAccountVo();
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("code"))) {
             code = jsonParam.getString("code");
         }
@@ -125,6 +131,21 @@ public class ApiAuthController extends ApiBaseAction {
             userVo.setGender(userInfo.getGender());
             userVo.setNickname(userInfo.getNickName());
             userService.save(userVo);
+            // 初次微信登录后就建立用户账户表  2020.5.7
+            useraccountentity.setUserId(userVo.getUserId());
+            useraccountentity.setIntegralType("sign");
+            useraccountentity.setTitle("初次签到");
+            useraccountentity.setLinkId(0);
+            useraccountentity.setAmount(new BigDecimal("1.0"));
+            useraccountentity.setBalance(new BigDecimal("100.0"));
+            useraccountentity.setCategory("integral");
+            useraccountentity.setMark("首签获得");
+            useraccountentity.setCreateTime(nowTime);
+            useraccountentity.setModifyTime(nowTime);
+            useraccountentity.setPm(1);
+            useraccountentity.setStatus(1);
+            useraccountentity.setSuccSign(1);
+            userAccountService.save(useraccountentity);
         } else {
             userVo.setLast_login_ip(this.getClientIp());
             userVo.setLast_login_time(nowTime);
@@ -140,7 +161,13 @@ public class ApiAuthController extends ApiBaseAction {
 
         resultObj.put("token", token);
         resultObj.put("userInfo", userInfo);
+        resultObj.put("userRegTime", userVo.getRegister_time());
+        resultObj.put("userDonaIntegral", userVo.getDonationIntegral());
+        resultObj.put("userTaskIntegral", userVo.getTaskIntegral());
+        resultObj.put("userDeduIntegral", userVo.getDeductionIntegral());
+        resultObj.put("userMobile", userVo.getMobile());
         resultObj.put("userId", userVo.getUserId());
+        resultObj.put("userlevelId", userVo.getUser_level_id());
         return toResponsSuccess(resultObj);
     }
 
@@ -152,6 +179,7 @@ public class ApiAuthController extends ApiBaseAction {
     @PostMapping("login_by_ali")
     public Object login_by_ali() {
         JSONObject jsonParam = this.getJsonRequest();
+        UserAccountVo useraccountentity= new UserAccountVo();
         String code = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("code"))) {
             code = jsonParam.getString("code");
@@ -187,6 +215,21 @@ public class ApiAuthController extends ApiBaseAction {
                 userVo.setGender("m".equalsIgnoreCase(userInfoResponse.getGender()) ? 1 : 0);
                 userVo.setNickname(userInfoResponse.getNickName());
                 userService.save(userVo);
+                // 初次微信登录后就建立用户账户表  2020.5.7
+                useraccountentity.setUserId(userVo.getUserId());
+                useraccountentity.setIntegralType("sign");
+                useraccountentity.setTitle("初次签到");
+                useraccountentity.setLinkId(0);
+                useraccountentity.setAmount(new BigDecimal("1.0"));
+                useraccountentity.setBalance(new BigDecimal("100.0"));
+                useraccountentity.setCategory("integral");
+                useraccountentity.setMark("首签获得");
+                useraccountentity.setCreateTime(nowTime);
+                useraccountentity.setModifyTime(nowTime);
+                useraccountentity.setPm(1);
+                useraccountentity.setStatus(1);
+                useraccountentity.setSuccSign(1);
+                userAccountService.save(useraccountentity);
             } else {
                 userVo.setLast_login_ip(this.getClientIp());
                 userVo.setLast_login_time(nowTime);
@@ -204,6 +247,12 @@ public class ApiAuthController extends ApiBaseAction {
             resultObj.put("token", token);
             resultObj.put("userInfo", userInfoResponse);
             resultObj.put("userId", userVo.getUserId());
+            resultObj.put("userRegTime", userVo.getRegister_time());
+            resultObj.put("userDonaIntegral", userVo.getDonationIntegral());
+            resultObj.put("userTaskIntegral", userVo.getTaskIntegral());
+            resultObj.put("userDeduIntegral", userVo.getDeductionIntegral());
+            resultObj.put("userMobile", userVo.getMobile());
+            resultObj.put("userlevelId", userVo.getUser_level_id());
             return toResponsSuccess(resultObj);
         } catch (AlipayApiException e) {
             return toResponsFail("登录失败");

@@ -1,6 +1,7 @@
 package com.platform.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -8,6 +9,8 @@ import java.util.Date;
  * @author lipengjun
  * @email 939961241@qq.com
  * @date 2017-08-15 08:03:41
+ * 增加了社工和社工编号 2020-05-07
+ * 增加了分类总积分 2020-05-24
  */
 public class UserVo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -40,6 +43,23 @@ public class UserVo implements Serializable {
     private String avatar;
     //微信Id
     private String weixin_openid;
+     //是否社工
+    private Integer is_social_worker;
+     //社工号码
+    private String social_number;
+    /**
+     * 完成任务获得总数量
+     */
+    private BigDecimal task_integral;
+    /**
+     * 捐赠获得总积分
+     */
+    private BigDecimal donation_integral;
+    /**
+     * 消费获得总积分
+     */
+    private BigDecimal deduction_integral;
+
 
     public Long getUserId() {
         return userId;
@@ -151,5 +171,45 @@ public class UserVo implements Serializable {
 
     public void setWeixin_openid(String weixin_openid) {
         this.weixin_openid = weixin_openid;
+    }
+
+    public Integer getIsSocialworker() {
+        return is_social_worker;
+    }
+
+    public void setIsSocialworker(Integer is_social_worker) {
+        this.is_social_worker = is_social_worker;
+    }
+
+    public String getSocialNumber() {
+        return social_number;
+    }
+
+    public void setSocialNumber(String social_number) {
+        this.social_number = social_number;
+    }
+
+    public void setTaskIntegral(BigDecimal task_integral) {
+        this.task_integral = task_integral;
+    }
+
+    public BigDecimal getTaskIntegral() {
+        return task_integral;
+    }
+
+    public void setDeductionIntegral(BigDecimal deduction_integral) {
+        this.deduction_integral = deduction_integral;
+    }
+
+    public BigDecimal getDeductionIntegral() {
+        return deduction_integral;
+    }
+
+    public void setDonationIntegral(BigDecimal donation_integral) {
+        this.donation_integral = donation_integral;
+    }
+
+    public BigDecimal getDonationIntegral() {
+        return donation_integral;
     }
 }
