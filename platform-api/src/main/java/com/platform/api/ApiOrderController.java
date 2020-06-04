@@ -20,10 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者: @author Harmon <br>
@@ -59,18 +56,31 @@ public class ApiOrderController extends ApiBaseAction {
     @PostMapping("list")
     public Object list(@LoginUser UserVo loginUser,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
-                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                       @RequestParam(value = "size", defaultValue = "10") Integer size,
+                       @RequestParam(value = "status",defaultValue = "-1") Integer status) {
         //
         Map params = new HashMap();
         params.put("user_id", loginUser.getUserId());
-        params.put("page", page);
-        params.put("limit", size);
         params.put("sidx", "id");
         params.put("order", "asc");
         //查询列表数据
         Query query = new Query(params);
         List<OrderVo> orderEntityList = orderService.queryList(query);
-        int total = orderService.queryTotal(query);
+        List<OrderVo> t = new ArrayList<>();
+        for(OrderVo orderVo : orderEntityList){
+            if (orderVo.getPay_status() == status){
+                t.add(orderVo);
+            }
+        }
+        if (status != -1) {
+            orderEntityList = t;
+        }
+        int total = orderEntityList.size();
+        if ((page-1) * size>= total){
+            orderEntityList = new ArrayList<>();
+        }else {
+            orderEntityList = orderEntityList.subList(page*size,page*size+10);
+        }
         ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
         //
         for (OrderVo item : orderEntityList) {

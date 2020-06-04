@@ -115,7 +115,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
         params.put("cityName", cityName);
         params.put("provinceName", provinceName);
         params.put("countyName", countyName);
-        params.put("approveStatus", approve);
+        params.put("approveStatus", approve.toString());
 
         List<HelpIssueVo> helpIssueList = helpIssueService.queryList(params);
         List<Map<String, Object>> newIssueList = new ArrayList<>();

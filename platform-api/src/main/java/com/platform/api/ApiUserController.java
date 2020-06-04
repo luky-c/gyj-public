@@ -2,6 +2,7 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.qcloudsms.SmsSingleSenderResult;
+import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.dao.ApiUserLevelMapper;
 import com.platform.entity.*;
@@ -9,14 +10,12 @@ import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
 import com.platform.service.SysConfigService;
 import com.platform.util.ApiBaseAction;
+import com.platform.util.ApiPageUtils;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -101,7 +100,9 @@ public class ApiUserController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取月排名")
     @PostMapping("getRankbyMonth")
-    public Object getRankbyMonth(@LoginUser UserVo loginUser) {
+    public Object getRankbyMonth(@LoginUser UserVo loginUser,
+                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                 @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map<String, Object> resultObj = new HashMap<String, Object>();
         List<RankVo>  rankVoList= userAccountService.queryListByMonth();
         for (int i=0;i <rankVoList.size();i++){
@@ -110,6 +111,13 @@ public class ApiUserController extends ApiBaseAction {
                resultObj.put("position", position);
             }
         }
+        int len = rankVoList.size();
+        if ((page-1) * size>= len){
+            rankVoList = new ArrayList<>();
+        }else {
+            rankVoList = rankVoList.subList(page*size,page*size+10);
+        }
+        resultObj.put("total",len);
         resultObj.put("userRankbyMonth", rankVoList);
         return toResponsSuccess(resultObj);
     }
@@ -122,7 +130,9 @@ public class ApiUserController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取周排名")
     @PostMapping("getRankbyWeek")
-    public Object getRankbyWeek(@LoginUser UserVo loginUser) {
+    public Object getRankbyWeek(@LoginUser UserVo loginUser,
+                                @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                @RequestParam(value = "size", defaultValue = "10") Integer size) {
         Map<String, Object> resultObj = new HashMap<String, Object>();
         List<RankVo>  rankVoList= userAccountService.queryListByWeek();
         for (int i=0;i <rankVoList.size();i++){
@@ -131,6 +141,13 @@ public class ApiUserController extends ApiBaseAction {
                 resultObj.put("position", position);
             }
         }
+        int len = rankVoList.size();
+        if ((page-1) * size>= len){
+            rankVoList = new ArrayList<>();
+        }else {
+            rankVoList = rankVoList.subList(page*size,page*size+10);
+        }
+        resultObj.put("total",len);
         resultObj.put("userRankbyWeek", rankVoList);
         return toResponsSuccess(resultObj);
     }
