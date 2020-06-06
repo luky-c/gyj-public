@@ -115,7 +115,7 @@ public class ApiUserController extends ApiBaseAction {
         if ((page-1) * size>= len){
             rankVoList = new ArrayList<>();
         }else {
-            rankVoList = rankVoList.subList(page*size,page*size+10);
+            rankVoList = rankVoList.subList((page-1)*size,page*size);
         }
         resultObj.put("total",len);
         resultObj.put("userRankbyMonth", rankVoList);
@@ -145,7 +145,7 @@ public class ApiUserController extends ApiBaseAction {
         if ((page-1) * size>= len){
             rankVoList = new ArrayList<>();
         }else {
-            rankVoList = rankVoList.subList(page*size,page*size+10);
+            rankVoList = rankVoList.subList((page-1)*size,page*size);
         }
         resultObj.put("total",len);
         resultObj.put("userRankbyWeek", rankVoList);
@@ -255,7 +255,7 @@ public class ApiUserController extends ApiBaseAction {
             params.put("sidx", "id");
             params.put("order", "desc");
             List<UserAccountVo> userAccountDonation = userAccountService.queryList(params);
-            if (null!=userAccountDonation){
+            if (null!=userAccountDonation && userAccountDonation.size() != 0){
                 BigDecimal num1 =userAccountDonation.get(0).getAmount();
                 BigDecimal balance1 = balan.add(num1);
                 useraccountentity.setUserId(loginUser.getUserId());
@@ -426,5 +426,30 @@ public class ApiUserController extends ApiBaseAction {
         userVo.setMobile(mobile);
         userService.update(userVo);
         return toResponsSuccess("手机绑定成功");
+    }
+
+    @ApiOperation(value = "社工绑定")
+    @RequestMapping(value = "/social")
+    public String socialBound(@LoginUser UserVo loginUser,
+                              @RequestParam String number){
+        Map params = new HashMap();
+
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        userVo.setSocialNumber(number);
+        userVo.setIsSocialworker(1);
+        userService.update(userVo);
+        return "success";
+    }
+
+    @ApiOperation(value = "校验社工")
+    @RequestMapping(value = "/checkIsSocial")
+    public boolean check(@LoginUser UserVo loginUser){
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        Integer is = userVo.getIsSocialworker();
+        if (is == 1 ){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

@@ -108,6 +108,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
      */
     @ApiOperation(value = "求助信息分类查询")
     @RequestMapping("/issueListByStatus")
+    @IgnoreAuth
     public Object issueListByStatus(Long type_id,Integer approve,String provinceName,String cityName,String countyName) {
        // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map params = new HashMap();
