@@ -430,7 +430,7 @@ public class ApiUserController extends ApiBaseAction {
 
     @ApiOperation(value = "社工绑定")
     @RequestMapping(value = "/social")
-    public String socialBound(@LoginUser UserVo loginUser,
+    public Object socialBound(@LoginUser UserVo loginUser,
                               @RequestParam String number){
         Map params = new HashMap();
 
@@ -438,18 +438,16 @@ public class ApiUserController extends ApiBaseAction {
         userVo.setSocialNumber(number);
         userVo.setIsSocialworker(1);
         userService.update(userVo);
-        return "success";
+        return toResponsSuccess("社工绑定成功");
     }
 
     @ApiOperation(value = "校验社工")
     @RequestMapping(value = "/checkIsSocial")
-    public boolean check(@LoginUser UserVo loginUser){
+    public Object check(@LoginUser UserVo loginUser){
         UserVo userVo = userService.queryObject(loginUser.getUserId());
-        Integer is = userVo.getIsSocialworker();
-        if (is == 1 ){
-            return true;
-        }else {
-            return false;
-        }
+        Map<String, Object> resultObj = new HashMap<String, Object>();
+        resultObj.put("isSocialWorker", userVo.getIsSocialworker() == 1 ? true : false);
+        resultObj.put("socialNumber", userVo.getSocialNumber());
+        return toResponsSuccess(resultObj);
     }
 }
