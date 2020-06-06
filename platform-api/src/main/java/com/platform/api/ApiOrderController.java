@@ -78,7 +78,7 @@ public class ApiOrderController extends ApiBaseAction {
         int total = orderEntityList.size();
         if ((page-1) * size>= total){
             orderEntityList = new ArrayList<>();
-        }else {
+        } else if (!(page == 1 && page * size >= total)) {
             orderEntityList = orderEntityList.subList((page-1)*size,page*size);
         }
         ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());

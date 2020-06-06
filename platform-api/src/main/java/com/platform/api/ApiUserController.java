@@ -112,9 +112,9 @@ public class ApiUserController extends ApiBaseAction {
             }
         }
         int len = rankVoList.size();
-        if ((page-1) * size>= len){
+        if ((page - 1) * size >= len) {
             rankVoList = new ArrayList<>();
-        }else {
+        } else if(!(page == 1 && page * size >= len)) {
             rankVoList = rankVoList.subList((page-1)*size,page*size);
         }
         resultObj.put("total",len);
@@ -142,9 +142,9 @@ public class ApiUserController extends ApiBaseAction {
             }
         }
         int len = rankVoList.size();
-        if ((page-1) * size>= len){
+        if ((page - 1) * size >= len) {
             rankVoList = new ArrayList<>();
-        }else {
+        } else if (!(page == 1 && page * size >= len)){
             rankVoList = rankVoList.subList((page-1)*size,page*size);
         }
         resultObj.put("total",len);
