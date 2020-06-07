@@ -112,6 +112,7 @@ public class ApiGoodsController extends ApiBaseAction {
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "商品id", paramType = "path", required = true),
             @ApiImplicitParam(name = "referrer", value = "商品referrer", paramType = "path", required = false)})
     @PostMapping(value = "detail")
+    @IgnoreAuth
     public Object detail(Integer id, Long referrer) {
         Map<String, Object> resultObj = new HashMap();
         //

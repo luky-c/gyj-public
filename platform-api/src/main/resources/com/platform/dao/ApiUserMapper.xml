@@ -24,6 +24,7 @@
         <result property="task_integral" column="task_integral"/>
         <result property="deduction_integral" column="deduction_integral"/>
         <result property="donation_integral" column="donation_integral"/>
+        <result property="id_for_show" column="id_for_show"/>
     </resultMap>
 
     <select id="queryObject" resultMap="userMap">
@@ -80,7 +81,8 @@
 			`social_number`,
 			`task_integral`,
             `deduction_integral`,
-			`donation_integral`
+			`donation_integral`,
+			`id_for_show`,
 		)
 		values
 		(
@@ -101,7 +103,8 @@
             #{social_number},
 			#{task_integral},
             #{deduction_integral},
-			#{donation_integral}
+			#{donation_integral},
+			#{id_for_show},
 		)
 	</insert>
 
@@ -126,6 +129,7 @@
             <if test="task_integral != null">`task_integral` = #{task_integral},</if>
             <if test="deduction_integral != null">`deduction_integral` = #{deduction_integral},</if>
             <if test="donation_integral != null">`donation_integral` = #{donation_integral},</if>
+            <if test="id_for_show != null">`id_for_show` = #{id_for_show},</if>
         </set>
         where id = #{userId}
     </update>

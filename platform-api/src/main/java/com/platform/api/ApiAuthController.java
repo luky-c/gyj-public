@@ -170,6 +170,7 @@ public class ApiAuthController extends ApiBaseAction {
         resultObj.put("userlevelId", userVo.getUser_level_id());
         resultObj.put("isSocialWorker", userVo.getIsSocialworker());
         resultObj.put("socialNumber", userVo.getSocialNumber());
+        resultObj.put("idForShow", userVo.getIdForShow());
         return toResponsSuccess(resultObj);
     }
 
@@ -257,6 +258,7 @@ public class ApiAuthController extends ApiBaseAction {
             resultObj.put("userlevelId", userVo.getUser_level_id());
             resultObj.put("isSocialWorker", userVo.getIsSocialworker());
             resultObj.put("socialNumber", userVo.getSocialNumber());
+            resultObj.put("idForShow", userVo.getIdForShow());
             return toResponsSuccess(resultObj);
         } catch (AlipayApiException e) {
             return toResponsFail("登录失败");

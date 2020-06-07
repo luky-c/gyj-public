@@ -54,7 +54,6 @@ public class ApiOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取订单列表")
     @PostMapping("list")
-    @IgnoreAuth
     public Object list(@LoginUser UserVo loginUser,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size,

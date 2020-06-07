@@ -47,6 +47,8 @@ public class UserVo implements Serializable {
     private Integer is_social_worker;
      //社工号码
     private String social_number;
+    // 显示的可修改的ID
+    private String id_for_show;
     /**
      * 完成任务获得总数量
      */
@@ -211,5 +213,13 @@ public class UserVo implements Serializable {
 
     public BigDecimal getDonationIntegral() {
         return donation_integral;
+    }
+
+    public String getIdForShow() {
+        return id_for_show;
+    }
+
+    public void setIdForShow(String id_for_show) {
+        this.id_for_show = id_for_show;
     }
 }

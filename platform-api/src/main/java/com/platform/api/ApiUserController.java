@@ -448,6 +448,18 @@ public class ApiUserController extends ApiBaseAction {
         Map<String, Object> resultObj = new HashMap<String, Object>();
         resultObj.put("isSocialWorker", userVo.getIsSocialworker() == 1 ? true : false);
         resultObj.put("socialNumber", userVo.getSocialNumber());
+        resultObj.put("socialNumber", userVo.getSocialNumber());
+        resultObj.put("idForShow", userVo.getIdForShow());
         return toResponsSuccess(resultObj);
+    }
+
+    @ApiOperation(value = "更新个人显示ID")
+    @RequestMapping(value = "/updateShowId")
+    public Object updateShowId(@LoginUser UserVo loginUser, @RequestParam String showId){
+
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        userVo.setIdForShow(showId);
+        userService.update(userVo);
+        return toResponsSuccess("修改成功");
     }
 }
