@@ -43,6 +43,10 @@
 		select * from nideshop_goods where id = #{value}
 	</select>
 
+    <select id="regularQuery" resultMap="goodsMap">
+		select * from nideshop_goods where name like concat('%',#{name},'%')
+	</select>
+
     <select id="queryList" resultMap="goodsMap">
         select
         <if test="fields != null and fields != ''">

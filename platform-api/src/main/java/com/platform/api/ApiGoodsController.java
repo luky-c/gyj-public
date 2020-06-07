@@ -18,10 +18,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -293,6 +290,16 @@ public class ApiGoodsController extends ApiBaseAction {
         resultObj.put("parentCategory", parentCategory);
         resultObj.put("brotherCategory", brotherCategory);
         return toResponsSuccess(resultObj);
+    }
+
+    @ApiOperation(value = "商品查询")
+    @IgnoreAuth
+    @GetMapping(value = "checkGoods")
+    public Object checkGoods(@LoginUser UserVo loginUser , @RequestParam String name){
+        Map params = new HashMap();
+        params.put("name",name);
+        List<GoodsVo> goodsVo = goodsService.queryRe(params);
+        return toResponsSuccess(goodsVo);
     }
 
     /**

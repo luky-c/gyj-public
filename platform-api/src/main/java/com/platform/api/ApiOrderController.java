@@ -54,15 +54,18 @@ public class ApiOrderController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取订单列表")
     @PostMapping("list")
+    @IgnoreAuth
     public Object list(@LoginUser UserVo loginUser,
                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                        @RequestParam(value = "size", defaultValue = "10") Integer size,
                        @RequestParam(value = "status",defaultValue = "-1") Integer status) {
-        //
+
         Map params = new HashMap();
         params.put("user_id", loginUser.getUserId());
         params.put("sidx", "id");
         params.put("order", "asc");
+        params.put("page",page);
+        params.put("limit",size);
         //查询列表数据
         Query query = new Query(params);
         List<OrderVo> orderEntityList = orderService.queryList(query);
