@@ -14,8 +14,16 @@ import com.platform.util.ApiPageUtils;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -40,11 +48,84 @@ public class ApiUserController extends ApiBaseAction {
     private ApiUserAccountService userAccountService;
     @Autowired
     private ApiUserLevelMapper userLevelDao;
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private String baseUrl = "http://172.21.0.11/gyjapp";
+
+    @ApiOperation(value = "发送短信")
+    @PostMapping("duanxin")
+    public Object faduanxin(@LoginUser UserVo loginUser){
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        if (userVo.getMobile() == null || userVo.getMobile() == ""){
+            return toResponsFail("请输入手机号");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("CMD", "A6A0");
+        map.add("loginID",userVo.getMobile());
+        map.add("clientType","java");
+        map.add("SN","");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
+        return toResponsMsgSuccess(response.getBody());
+    }
+
+    @ApiOperation(value = "发送短信")
+    @PostMapping("duanxinWithNum")
+    @IgnoreAuth
+    public Object faduanxin2(@LoginUser UserVo loginUser,@RequestParam String num){
+
+        if (num == ""){
+            return toResponsFail("请输入手机号");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("CMD", "A6A0");
+        map.add("loginID",num);
+        map.add("clientType","java");
+        map.add("SN","");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
+        return toResponsMsgSuccess(response.getBody());
+    }
+
+    @ApiOperation(value = "验证短信")
+    @PostMapping("yanzheng")
+    @IgnoreAuth
+    public Object yanzheng(@LoginUser UserVo loginUser,@RequestParam String num,@RequestParam String mob){
+
+        if (num == ""){
+            return toResponsFail("请输入验证码");
+        }
+        if (mob == null || mob == ""){
+            return toResponsFail("手机号为空");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("CMD", "A7A0");
+        map.add("loginID",mob);
+        map.add("verifyCode",num);
+        map.add("clientType","java");
+        map.add("SN","");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
+        return toResponsMsgSuccess(response.getBody());
+    }
+
+
     /**
-     * 发送短信
+     * 发送短信(废弃）
      */
     @ApiOperation(value = "发送短信")
     @PostMapping("smscode")
+    @IgnoreAuth
     public Object smscode(@LoginUser UserVo loginUser) {
         JSONObject jsonParams = getJsonRequest();
         String phone = jsonParams.getString("phone");
