@@ -82,7 +82,7 @@
 			`task_integral`,
             `deduction_integral`,
 			`donation_integral`,
-			`id_for_show`,
+			`id_for_show`
 		)
 		values
 		(
@@ -104,7 +104,7 @@
 			#{task_integral},
             #{deduction_integral},
 			#{donation_integral},
-			#{id_for_show},
+			#{id_for_show}
 		)
 	</insert>
 

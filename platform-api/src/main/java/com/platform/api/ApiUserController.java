@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.qcloudsms.SmsSingleSenderResult;
 import com.platform.annotation.IgnoreAuth;
@@ -61,14 +62,14 @@ public class ApiUserController extends ApiBaseAction {
             return toResponsFail("请输入手机号");
         }
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("CMD", "A6A0");
-        map.add("loginID",userVo.getMobile());
-        map.add("clientType","java");
-        map.add("SN","");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HashMap<String, String> map= new HashMap<>();
+        map.put("CMD", "A6A0");
+        map.put("loginID",userVo.getMobile());
+        map.put("clientType","java");
+        map.put("SN","");
+        String json = JSON.toJSONString(map);
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
         return toResponsMsgSuccess(response.getBody());
     }
@@ -82,14 +83,15 @@ public class ApiUserController extends ApiBaseAction {
             return toResponsFail("请输入手机号");
         }
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("CMD", "A6A0");
-        map.add("loginID",num);
-        map.add("clientType","java");
-        map.add("SN","");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HashMap<String, String> map= new HashMap<>();
+        map.put("CMD", "A6A0");
+        map.put("loginID",num);
+        map.put("clientType","java");
+        map.put("SN","");
+        String json =  JSON.toJSONString(map);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
         return toResponsMsgSuccess(response.getBody());
     }
@@ -97,24 +99,24 @@ public class ApiUserController extends ApiBaseAction {
     @ApiOperation(value = "验证短信")
     @PostMapping("yanzheng")
     @IgnoreAuth
-    public Object yanzheng(@LoginUser UserVo loginUser,@RequestParam String num,@RequestParam String mob){
+    public Object yanzheng(@LoginUser UserVo loginUser,@RequestParam String num,@RequestParam String code){
 
-        if (num == ""){
+        if (code == ""){
             return toResponsFail("请输入验证码");
         }
-        if (mob == null || mob == ""){
+        if (num == null || num == ""){
             return toResponsFail("手机号为空");
         }
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("CMD", "A7A0");
-        map.add("loginID",mob);
-        map.add("verifyCode",num);
-        map.add("clientType","java");
-        map.add("SN","");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HashMap<String, String> map= new HashMap<>();
+        map.put("CMD", "A7A0");
+        map.put("loginID",num);
+        map.put("verifyCode",code);
+        map.put("clientType","java");
+        map.put("SN","");
+        String json = JSON.toJSONString(map);
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( baseUrl, request , String.class );
         return toResponsMsgSuccess(response.getBody());
     }
