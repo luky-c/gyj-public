@@ -391,14 +391,21 @@ public class ApiUserController extends ApiBaseAction {
 	@ApiOperation(value = "获取当前会员积分详情")
 	@RequestMapping(value="/getIntegrateDetail")
 	@ResponseBody
-	public Object getIntegrateDetail(@LoginUser UserVo loginUser) throws Exception {
+	public Object getIntegrateDetail(@LoginUser UserVo loginUser,@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer size) throws Exception {
         Map<String, Object> resultObj = new HashMap<String, Object>();
 		Map params = new HashMap();
         params.put("userId", loginUser.getUserId());
         List<UserAccountVo> userAccountList = userAccountService.queryList(params);
         UserVo userEn = userService.queryObject(loginUser.getUserId());
 
+
         if (null!=userAccountList){
+            int total = userAccountList.size();
+            if ((page-1) * size>= total){
+                userAccountList = new ArrayList<>();
+            } else if (!(page == 1 && page * size >= total)) {
+                userAccountList = userAccountList.subList((page-1)*size,page*size);
+            }
             resultObj.put("userAccountList", userAccountList);}
 
         Map params1 = new HashMap();
