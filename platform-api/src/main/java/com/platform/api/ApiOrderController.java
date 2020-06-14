@@ -70,13 +70,13 @@ public class ApiOrderController extends ApiBaseAction {
         List<OrderVo> orderEntityList = orderService.queryList(query);
         List<OrderVo> t = new ArrayList<>();
         for(OrderVo orderVo : orderEntityList){
-            if (orderVo.getPay_status() == status){
+            if (status != -1 && orderVo.getOrder_status() == status){
+                t.add(orderVo);
+            } else if(status == -1 && orderVo.getOrder_status() != 101) {
                 t.add(orderVo);
             }
         }
-        if (status != -1) {
-            orderEntityList = t;
-        }
+        orderEntityList = t;
         int total = orderEntityList.size();
         if ((page-1) * size>= total){
             orderEntityList = new ArrayList<>();
