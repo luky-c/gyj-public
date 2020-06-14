@@ -15,6 +15,7 @@ import com.platform.util.ApiPageUtils;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -290,7 +291,7 @@ public class ApiUserController extends ApiBaseAction {
             useraccountentity.setTitle("初次签到");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
-            useraccountentity.setBalance(new BigDecimal("100.0"));
+            useraccountentity.setBalance(new BigDecimal("10.0"));
             useraccountentity.setCategory("integral");
             useraccountentity.setMark("首签获得");
             useraccountentity.setCreateTime(nowTime);
@@ -549,6 +550,16 @@ public class ApiUserController extends ApiBaseAction {
 
         UserVo userVo = userService.queryObject(loginUser.getUserId());
         userVo.setIdForShow(showId);
+        userService.update(userVo);
+        return toResponsSuccess("修改成功");
+    }
+
+    @ApiOperation(value = "修改密码")
+    @RequestMapping(value = "/editPassword")
+    @IgnoreAuth
+    public Object editPassword(String mobile, String password){
+        UserVo userVo = userService.queryByMobile(mobile);
+        userVo.setPassword(DigestUtils.sha256Hex(password));
         userService.update(userVo);
         return toResponsSuccess("修改成功");
     }

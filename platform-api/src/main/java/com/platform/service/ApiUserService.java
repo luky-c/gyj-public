@@ -42,9 +42,14 @@ public class ApiUserService {
     public void save(String mobile, String password) {
         UserVo user = new UserVo();
         user.setMobile(mobile);
+        user.setNickname(mobile);
+        user.setSocialNumber("");
+        user.setIsSocialworker(0);
+        user.setGender(0);
         user.setUsername(mobile);
         user.setPassword(DigestUtils.sha256Hex(password));
         user.setRegister_time(new Date());
+
         userDao.save(user);
     }
 
