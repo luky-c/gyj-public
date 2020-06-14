@@ -7,10 +7,7 @@ import com.platform.entity.HelpIssueVo;
 import com.platform.entity.HelpTypeVo;
 import com.platform.entity.UserAccountVo;
 import com.platform.entity.UserVo;
-import com.platform.service.ApiHelpIssueService;
-import com.platform.service.ApiHelpTypeService;
-import com.platform.service.ApiUserAccountService;
-import com.platform.service.ApiUserService;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.Base64Util;
 import io.swagger.annotations.Api;
@@ -41,6 +38,8 @@ public class ApiHelpIssueController extends ApiBaseAction {
     private ApiUserAccountService userAccountService;
     @Autowired
     private ApiUserService userService;
+    @Autowired
+    private FabricService fabricService;
 
     /**
      * 查看帮助类型列表
@@ -252,6 +251,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
             useraccountentity.setStatus(1);
             useraccountentity.setSuccSign(1);
             userAccountService.save(useraccountentity);
+            fabricService.save(useraccountentity);
             //update user task integral
             userEntity.setUserId(loginUser.getUserId());
             BigDecimal integral = taskintegral.add(new BigDecimal("50.0"));

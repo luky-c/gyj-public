@@ -15,6 +15,7 @@ import com.platform.entity.UserInfo;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
+import com.platform.service.FabricService;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiUserUtils;
@@ -57,6 +58,9 @@ public class ApiAuthController extends ApiBaseAction {
     private TokenService tokenService;
     @Autowired
     private ApiUserAccountService userAccountService;
+
+    @Autowired
+    private FabricService fabricService;
 
     /**
      * 登录APIUserAccount
@@ -146,6 +150,7 @@ public class ApiAuthController extends ApiBaseAction {
             useraccountentity.setStatus(1);
             useraccountentity.setSuccSign(1);
             userAccountService.save(useraccountentity);
+            fabricService.save(useraccountentity);
         } else {
             userVo.setLast_login_ip(this.getClientIp());
             userVo.setLast_login_time(nowTime);
@@ -233,6 +238,7 @@ public class ApiAuthController extends ApiBaseAction {
                 useraccountentity.setStatus(1);
                 useraccountentity.setSuccSign(1);
                 userAccountService.save(useraccountentity);
+                fabricService.save(useraccountentity);
             } else {
                 userVo.setLast_login_ip(this.getClientIp());
                 userVo.setLast_login_time(nowTime);

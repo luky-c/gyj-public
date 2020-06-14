@@ -8,6 +8,7 @@ import com.platform.dao.ApiUserLevelMapper;
 import com.platform.entity.*;
 import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
+import com.platform.service.FabricService;
 import com.platform.service.SysConfigService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiPageUtils;
@@ -46,6 +47,8 @@ public class ApiUserController extends ApiBaseAction {
     private SysConfigService sysConfigService;
     @Autowired
     private ApiUserAccountService userAccountService;
+    @Autowired
+    private FabricService fabricService;
     @Autowired
     private ApiUserLevelMapper userLevelDao;
     @Autowired
@@ -297,6 +300,7 @@ public class ApiUserController extends ApiBaseAction {
             useraccountentity.setStatus(1);
             useraccountentity.setSuccSign(1);
             userAccountService.save(useraccountentity);
+            fabricService.save(useraccountentity);
             List<UserAccountVo> userAccountList1 = userAccountService.queryList(params);
             for (UserAccountVo userAccountVo : userAccountList1) {
                 BigDecimal amount1= userAccountVo.getAmount();
@@ -353,6 +357,7 @@ public class ApiUserController extends ApiBaseAction {
                 useraccountentity.setStatus(1);
                 useraccountentity.setSuccSign(1);
                 userAccountService.save(useraccountentity);
+                fabricService.save(useraccountentity);
                 //update donation_integral for user
                 userentity.setUserId(loginUser.getUserId());
                 userentity.setDonationIntegral(balance1);
@@ -373,6 +378,7 @@ public class ApiUserController extends ApiBaseAction {
                 useraccountentity.setStatus(1);
                 useraccountentity.setSuccSign(1);
                 userAccountService.save(useraccountentity);
+                fabricService.save(useraccountentity);
                 //update donation_integral for user
                 userentity.setUserId(loginUser.getUserId());
                 userentity.setDonationIntegral(balance1);
@@ -480,8 +486,9 @@ public class ApiUserController extends ApiBaseAction {
                 useraccountentity.setModifyTime(today);
                 useraccountentity.setId(list.get(0).getId());
 			}
-			    userAccountService.update(useraccountentity);
-			    return toResponsObject(0, "今天签到成功", resultObj);
+            userAccountService.update(useraccountentity);
+            fabricService.update(useraccountentity);
+            return toResponsObject(0, "今天签到成功", resultObj);
 		} catch (Exception e) {
 			    return toResponsObject(0, "今天签到失败", resultObj);
 		}
