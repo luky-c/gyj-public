@@ -63,8 +63,8 @@ public class ApiOrderController extends ApiBaseAction {
         params.put("user_id", loginUser.getUserId());
         params.put("sidx", "id");
         params.put("order", "asc");
-        params.put("page",page);
-        params.put("limit",size);
+        params.put("page", 1);
+        params.put("limit", 99999);
         //查询列表数据
         Query query = new Query(params);
         List<OrderVo> orderEntityList = orderService.queryList(query);
@@ -81,7 +81,11 @@ public class ApiOrderController extends ApiBaseAction {
         if ((page-1) * size>= total){
             orderEntityList = new ArrayList<>();
         } else if (!(page == 1 && page * size >= total)) {
-            orderEntityList = orderEntityList.subList((page-1)*size,page*size);
+            if(total < page*size) {
+                orderEntityList = orderEntityList.subList((page - 1) * size, total);
+            } else {
+                orderEntityList = orderEntityList.subList((page - 1) * size, page * size);
+            }
         }
         ApiPageUtils pageUtil = new ApiPageUtils(orderEntityList, total, query.getLimit(), query.getPage());
         //
