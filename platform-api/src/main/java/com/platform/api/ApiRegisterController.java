@@ -5,6 +5,7 @@ import com.platform.entity.UserAccountVo;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
+import com.platform.service.FabricService;
 import com.platform.util.ApiBaseAction;
 import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
@@ -34,6 +35,8 @@ public class ApiRegisterController  extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private ApiUserAccountService userAccountService;
+    @Autowired
+    private FabricService fabricService;
 
     /**
      * 注册
@@ -67,6 +70,7 @@ public class ApiRegisterController  extends ApiBaseAction {
         useraccountentity.setSuccSign(1);
 
         userAccountService.save(useraccountentity);
+        fabricService.save(useraccountentity);
 
         return toResponsSuccess("注册成功");
     }
