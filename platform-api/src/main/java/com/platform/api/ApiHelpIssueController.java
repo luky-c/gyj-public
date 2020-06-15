@@ -38,8 +38,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
     private ApiUserAccountService userAccountService;
     @Autowired
     private ApiUserService userService;
-    @Autowired
-    private FabricService fabricService;
+
 
     /**
      * 查看帮助类型列表
@@ -251,7 +250,6 @@ public class ApiHelpIssueController extends ApiBaseAction {
             useraccountentity.setStatus(1);
             useraccountentity.setSuccsign(1);
             userAccountService.save(useraccountentity);
-            fabricService.save(useraccountentity);
             //update user task integral
             userEntity.setUserId(loginUser.getUserId());
             BigDecimal integral = taskintegral.add(new BigDecimal("50.0"));
