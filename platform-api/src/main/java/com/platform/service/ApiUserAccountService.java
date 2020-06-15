@@ -17,6 +17,9 @@ public class ApiUserAccountService {
     @Autowired
     private ApiUserAccountMapper userAccountDao;
 
+    @Autowired
+    private FabricService fabricService;
+
     public UserAccountVo queryObject(Integer id) {
         return userAccountDao.queryObject(id);
     }
@@ -34,11 +37,15 @@ public class ApiUserAccountService {
     }
 
     public int save(UserAccountVo userAccount) {
-        return userAccountDao.save(userAccount);
+        int result = userAccountDao.save(userAccount);
+        fabricService.save(userAccount);
+        return result;
     }
 
     public int update(UserAccountVo userAccount) {
-        return userAccountDao.update(userAccount);
+        int result = userAccountDao.update(userAccount);
+        fabricService.update(userAccount);
+        return result;
     }
 
     public int delete(Integer id) {
