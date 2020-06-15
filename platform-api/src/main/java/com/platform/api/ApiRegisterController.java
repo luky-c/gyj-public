@@ -1,8 +1,11 @@
 package com.platform.api;
 
 import com.platform.annotation.IgnoreAuth;
+import com.platform.entity.UserAccountVo;
+import com.platform.entity.UserVo;
+import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
-import com.platform.utils.R;
+import com.platform.util.ApiBaseAction;
 import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 注册
@@ -22,9 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "注册")
 @RestController
 @RequestMapping("/api/register")
-public class ApiRegisterController {
+public class ApiRegisterController  extends ApiBaseAction {
     @Autowired
     private ApiUserService userService;
+    @Autowired
+    private ApiUserAccountService userAccountService;
 
     /**
      * 注册
@@ -32,12 +41,33 @@ public class ApiRegisterController {
     @ApiOperation(value = "注册")
     @IgnoreAuth
     @PostMapping("register")
-    public R register(String mobile, String password) {
+    public Object register(String mobile, String password) {
         Assert.isBlank(mobile, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
 
         userService.save(mobile, password);
 
-        return R.ok();
+        UserVo userVo = userService.queryByMobile(mobile);
+
+        Date nowTime = new Date();
+
+        UserAccountVo useraccountentity= new UserAccountVo();
+        useraccountentity.setUserId(userVo.getUserId());
+        useraccountentity.setIntegralType("sign");
+        useraccountentity.setTitle("初次签到");
+        useraccountentity.setLinkId(0);
+        useraccountentity.setAmount(new BigDecimal("1.0"));
+        useraccountentity.setBalance(new BigDecimal("10.0"));
+        useraccountentity.setCategory("integral");
+        useraccountentity.setMark("首签获得");
+        useraccountentity.setCreateTime(nowTime);
+        useraccountentity.setModifyTime(nowTime);
+        useraccountentity.setPm(1);
+        useraccountentity.setStatus(1);
+        useraccountentity.setSuccSign(1);
+
+        userAccountService.save(useraccountentity);
+
+        return toResponsSuccess("注册成功");
     }
 }

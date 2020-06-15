@@ -68,17 +68,35 @@ public class ApiAuthController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("login")
     @ApiOperation(value = "登录接口")
-    public R login(String mobile, String password) {
+    public Object login(String mobile, String password) {
         Assert.isBlank(mobile, "手机号不能为空");
         Assert.isBlank(password, "密码不能为空");
 
         //用户登录
         long userId = userService.login(mobile, password);
 
+        UserVo userVo = userService.queryByMobile(mobile);
+
         //生成token
         Map<String, Object> map = tokenService.createToken(userId);
 
-        return R.ok(map);
+        Map<String, Object> userInfo = new HashMap<String, Object>();
+        userInfo.put("nickName", userVo.getNickname());
+        userInfo.put("avatarUrl", userVo.getAvatar());
+        userInfo.put("gender", userVo.getGender());
+        map.put("userInfo", userInfo);
+        map.put("userRegTime", userVo.getRegister_time());
+        map.put("userDonaIntegral", userVo.getDonationIntegral());
+        map.put("userTaskIntegral", userVo.getTaskIntegral());
+        map.put("userDeduIntegral", userVo.getDeductionIntegral());
+        map.put("userMobile", userVo.getMobile());
+        map.put("userId", userVo.getUserId());
+        map.put("userlevelId", userVo.getUser_level_id());
+        map.put("isSocialWorker", userVo.getIsSocialworker());
+        map.put("socialNumber", userVo.getSocialNumber());
+        map.put("idForShow", userVo.getIdForShow());
+
+        return toResponsSuccess(map);
     }
 
     /**
@@ -134,6 +152,8 @@ public class ApiAuthController extends ApiBaseAction {
             //性别 0：未知、1：男、2：女
             userVo.setGender(userInfo.getGender());
             userVo.setNickname(userInfo.getNickName());
+            userVo.setIsSocialworker(0);
+            userVo.setSocialNumber("");
             userService.save(userVo);
             // 初次微信登录后就建立用户账户表  2020.5.7
             useraccountentity.setUserId(userVo.getUserId());
@@ -141,7 +161,7 @@ public class ApiAuthController extends ApiBaseAction {
             useraccountentity.setTitle("初次签到");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
-            useraccountentity.setBalance(new BigDecimal("100.0"));
+            useraccountentity.setBalance(new BigDecimal("10.0"));
             useraccountentity.setCategory("integral");
             useraccountentity.setMark("首签获得");
             useraccountentity.setCreateTime(nowTime);
@@ -222,6 +242,8 @@ public class ApiAuthController extends ApiBaseAction {
                 //F：女性；M：男性
                 userVo.setGender("m".equalsIgnoreCase(userInfoResponse.getGender()) ? 1 : 0);
                 userVo.setNickname(userInfoResponse.getNickName());
+                userVo.setIsSocialworker(0);
+                userVo.setSocialNumber("");
                 userService.save(userVo);
                 // 初次微信登录后就建立用户账户表  2020.5.7
                 useraccountentity.setUserId(userVo.getUserId());
@@ -229,7 +251,7 @@ public class ApiAuthController extends ApiBaseAction {
                 useraccountentity.setTitle("初次签到");
                 useraccountentity.setLinkId(0);
                 useraccountentity.setAmount(new BigDecimal("1.0"));
-                useraccountentity.setBalance(new BigDecimal("100.0"));
+                useraccountentity.setBalance(new BigDecimal("10.0"));
                 useraccountentity.setCategory("integral");
                 useraccountentity.setMark("首签获得");
                 useraccountentity.setCreateTime(nowTime);
