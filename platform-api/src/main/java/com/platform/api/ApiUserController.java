@@ -290,7 +290,7 @@ public class ApiUserController extends ApiBaseAction {
             useraccountentity.setTitle("初次签到");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
-            useraccountentity.setBalance(new BigDecimal("10.0"));
+            useraccountentity.setBalance(new BigDecimal("100.0"));
             useraccountentity.setCategory("integral");
             useraccountentity.setMark("首签获得");
             useraccountentity.setCreateTime(nowTime);
@@ -407,7 +407,11 @@ public class ApiUserController extends ApiBaseAction {
             if ((page-1) * size>= total){
                 userAccountList = new ArrayList<>();
             } else if (!(page == 1 && page * size >= total)) {
-                userAccountList = userAccountList.subList((page-1)*size,page*size);
+                if(total < page*size) {
+                    userAccountList = userAccountList.subList((page-1)*size,total);
+                } else {
+                    userAccountList = userAccountList.subList((page-1)*size,page*size);
+                }
             }
             resultObj.put("userAccountList", userAccountList);}
 

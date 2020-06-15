@@ -59,7 +59,7 @@ public class ApiRegisterController  extends ApiBaseAction {
         useraccountentity.setTitle("初次签到");
         useraccountentity.setLinkId(0);
         useraccountentity.setAmount(new BigDecimal("1.0"));
-        useraccountentity.setBalance(new BigDecimal("10.0"));
+        useraccountentity.setBalance(new BigDecimal("100.0"));
         useraccountentity.setCategory("integral");
         useraccountentity.setMark("首签获得");
         useraccountentity.setCreateTime(nowTime);
