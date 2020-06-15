@@ -579,6 +579,12 @@ public class ApiUserController extends ApiBaseAction {
         if (money != null){
             userVo.setDonationIntegral(userVo.getDonationIntegral().add(new BigDecimal(money)));
             userService.update(userVo);
+            UserAccountVo userAccountVo = new UserAccountVo();
+            userAccountVo.setAmount(new BigDecimal(money));
+            userAccountVo.setBalance(new BigDecimal(money));
+            userAccountVo.setUserId(loginUser.getUserId());
+            userAccountVo.setIntegraltype("donation");
+            userAccountService.save(userAccountVo);
             userService.deCredit(name);
             return toResponsMsgSuccess("绑定成功");
         }
