@@ -21,8 +21,8 @@ import java.util.concurrent.Executors;
 public class FabricService {
 
     private ExecutorService poolExecutor = Executors.newFixedThreadPool(3);
-    private final String IP = "http://localhost:8763";
-//    private final String IP = "http://152.136.98.57";
+//    private final String IP = "http://localhost:8763";
+    private final String IP = "http://152.136.98.57:8763";
     private final String SAVE_URL = "/fabricSDK/saveUserAccount";
     private final String UPDATE_URL = "fabricSDK/updateUserAccount";
 

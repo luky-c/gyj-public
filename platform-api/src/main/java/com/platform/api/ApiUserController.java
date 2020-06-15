@@ -12,19 +12,15 @@ import com.platform.service.ApiUserService;
 import com.platform.service.FabricService;
 import com.platform.service.SysConfigService;
 import com.platform.util.ApiBaseAction;
-import com.platform.util.ApiPageUtils;
 import com.platform.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -290,7 +286,7 @@ public class ApiUserController extends ApiBaseAction {
         List<UserAccountVo> userAccountList = userAccountService.queryList(params);
         if(null==userAccountList){
             useraccountentity.setUserId(loginUser.getUserId());
-            useraccountentity.setIntegralType("sign");
+            useraccountentity.setIntegraltype("sign");
             useraccountentity.setTitle("初次签到");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
@@ -301,7 +297,7 @@ public class ApiUserController extends ApiBaseAction {
             useraccountentity.setModifyTime(nowTime);
             useraccountentity.setPm(1);
             useraccountentity.setStatus(1);
-            useraccountentity.setSuccSign(1);
+            useraccountentity.setSuccsign(1);
             userAccountService.save(useraccountentity);
             fabricService.save(useraccountentity);
             List<UserAccountVo> userAccountList1 = userAccountService.queryList(params);
@@ -347,7 +343,7 @@ public class ApiUserController extends ApiBaseAction {
                 BigDecimal num1 =userAccountDonation.get(0).getAmount();
                 BigDecimal balance1 = balan.add(num1);
                 useraccountentity.setUserId(loginUser.getUserId());
-                useraccountentity.setIntegralType("donation");
+                useraccountentity.setIntegraltype("donation");
                 useraccountentity.setTitle("爱心捐赠");
                 useraccountentity.setLinkId(0);
                 useraccountentity.setAmount(balance1);
@@ -358,7 +354,7 @@ public class ApiUserController extends ApiBaseAction {
                 useraccountentity.setModifyTime(nowTime);
                 useraccountentity.setPm(1);
                 useraccountentity.setStatus(1);
-                useraccountentity.setSuccSign(1);
+                useraccountentity.setSuccsign(1);
                 userAccountService.save(useraccountentity);
                 fabricService.save(useraccountentity);
                 //update donation_integral for user
@@ -368,7 +364,7 @@ public class ApiUserController extends ApiBaseAction {
             } else {
                 BigDecimal balance1 = balan;
                 useraccountentity.setUserId(loginUser.getUserId());
-                useraccountentity.setIntegralType("donation");
+                useraccountentity.setIntegraltype("donation");
                 useraccountentity.setTitle("爱心捐赠");
                 useraccountentity.setLinkId(0);
                 useraccountentity.setAmount(balance1);
@@ -379,7 +375,7 @@ public class ApiUserController extends ApiBaseAction {
                 useraccountentity.setModifyTime(nowTime);
                 useraccountentity.setPm(1);
                 useraccountentity.setStatus(1);
-                useraccountentity.setSuccSign(1);
+                useraccountentity.setSuccsign(1);
                 userAccountService.save(useraccountentity);
                 fabricService.save(useraccountentity);
                 //update donation_integral for user
@@ -490,7 +486,7 @@ public class ApiUserController extends ApiBaseAction {
                 BigDecimal balance = list.get(0).getBalance();
                 BigDecimal num1=num.add(new BigDecimal("1.0"));
                 BigDecimal balance1 = balance.add(balan);
-                useraccountentity.setSuccSign(succ_record);
+                useraccountentity.setSuccsign(succ_record);
                 useraccountentity.setAmount(num1);
                 useraccountentity.setBalance(balance1);
                 useraccountentity.setModifyTime(today);

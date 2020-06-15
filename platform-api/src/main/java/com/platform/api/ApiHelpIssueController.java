@@ -238,7 +238,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
             /*成功完成审核任务后获得任务积分*/
             UserAccountVo useraccountentity = new UserAccountVo();
             useraccountentity.setUserId(loginUser.getUserId());
-            useraccountentity.setIntegralType("task");
+            useraccountentity.setIntegraltype("task");
             useraccountentity.setTitle("完成审核");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
@@ -249,7 +249,7 @@ public class ApiHelpIssueController extends ApiBaseAction {
             useraccountentity.setModifyTime(nowTime);
             useraccountentity.setPm(1);
             useraccountentity.setStatus(1);
-            useraccountentity.setSuccSign(1);
+            useraccountentity.setSuccsign(1);
             userAccountService.save(useraccountentity);
             fabricService.save(useraccountentity);
             //update user task integral

@@ -118,9 +118,9 @@ public class UserAccountVo implements Serializable {
         this.category = category;
     }
 
-    public String getIntegralType() { return integraltype; }
+    public String getIntegraltype() { return integraltype; }
 
-    public void setIntegralType(String integraltype) {
+    public void setIntegraltype(String integraltype) {
         this.integraltype = integraltype;
     }
 
@@ -181,11 +181,11 @@ public class UserAccountVo implements Serializable {
         this.pm = pm;
     }
 
-     public Integer getSuccSign() {
+     public Integer getSuccsign() {
         return succsign;
     }
 
-    public void setSuccSign(Integer succsign) {
+    public void setSuccsign(Integer succsign) {
         this.succsign = succsign;
     }
 }

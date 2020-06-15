@@ -21,7 +21,6 @@ import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiUserUtils;
 import com.platform.util.CommonUtil;
 import com.platform.utils.CharUtil;
-import com.platform.utils.R;
 import com.platform.utils.ResourceUtil;
 import com.platform.validator.Assert;
 import com.qiniu.util.StringUtils;
@@ -157,7 +156,7 @@ public class ApiAuthController extends ApiBaseAction {
             userService.save(userVo);
             // 初次微信登录后就建立用户账户表  2020.5.7
             useraccountentity.setUserId(userVo.getUserId());
-            useraccountentity.setIntegralType("sign");
+            useraccountentity.setIntegraltype("sign");
             useraccountentity.setTitle("初次签到");
             useraccountentity.setLinkId(0);
             useraccountentity.setAmount(new BigDecimal("1.0"));
@@ -168,7 +167,7 @@ public class ApiAuthController extends ApiBaseAction {
             useraccountentity.setModifyTime(nowTime);
             useraccountentity.setPm(1);
             useraccountentity.setStatus(1);
-            useraccountentity.setSuccSign(1);
+            useraccountentity.setSuccsign(1);
             userAccountService.save(useraccountentity);
             fabricService.save(useraccountentity);
         } else {
@@ -247,7 +246,7 @@ public class ApiAuthController extends ApiBaseAction {
                 userService.save(userVo);
                 // 初次微信登录后就建立用户账户表  2020.5.7
                 useraccountentity.setUserId(userVo.getUserId());
-                useraccountentity.setIntegralType("sign");
+                useraccountentity.setIntegraltype("sign");
                 useraccountentity.setTitle("初次签到");
                 useraccountentity.setLinkId(0);
                 useraccountentity.setAmount(new BigDecimal("1.0"));
@@ -258,7 +257,7 @@ public class ApiAuthController extends ApiBaseAction {
                 useraccountentity.setModifyTime(nowTime);
                 useraccountentity.setPm(1);
                 useraccountentity.setStatus(1);
-                useraccountentity.setSuccSign(1);
+                useraccountentity.setSuccsign(1);
                 userAccountService.save(useraccountentity);
                 fabricService.save(useraccountentity);
             } else {
