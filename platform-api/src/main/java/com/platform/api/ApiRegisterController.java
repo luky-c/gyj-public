@@ -5,6 +5,7 @@ import com.platform.entity.UserAccountVo;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiUserAccountService;
 import com.platform.service.ApiUserService;
+import com.platform.service.FabricService;
 import com.platform.util.ApiBaseAction;
 import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 注册
@@ -34,6 +34,8 @@ public class ApiRegisterController  extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private ApiUserAccountService userAccountService;
+    @Autowired
+    private FabricService fabricService;
 
     /**
      * 注册
@@ -53,7 +55,7 @@ public class ApiRegisterController  extends ApiBaseAction {
 
         UserAccountVo useraccountentity= new UserAccountVo();
         useraccountentity.setUserId(userVo.getUserId());
-        useraccountentity.setIntegralType("sign");
+        useraccountentity.setIntegraltype("sign");
         useraccountentity.setTitle("初次签到");
         useraccountentity.setLinkId(0);
         useraccountentity.setAmount(new BigDecimal("1.0"));
@@ -64,9 +66,10 @@ public class ApiRegisterController  extends ApiBaseAction {
         useraccountentity.setModifyTime(nowTime);
         useraccountentity.setPm(1);
         useraccountentity.setStatus(1);
-        useraccountentity.setSuccSign(1);
+        useraccountentity.setSuccsign(1);
 
         userAccountService.save(useraccountentity);
+        fabricService.save(useraccountentity);
 
         return toResponsSuccess("注册成功");
     }
