@@ -103,4 +103,11 @@ public class ApiUserService {
         return result;
     }
 
+    public Integer selectCredit (String name , int num){
+        return userDao.selectCredit(name,num);
+    }
+
+    public void deCredit(String name){
+        userDao.deCredit(name);
+    }
 }

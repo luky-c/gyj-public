@@ -567,4 +567,18 @@ public class ApiUserController extends ApiBaseAction {
         userService.update(userVo);
         return toResponsSuccess("修改成功");
     }
+
+    @ApiOperation("积分绑定")
+    @RequestMapping(value = "/bangding")
+    public Object bangding(@LoginUser UserVo loginUser,@RequestParam String name,@RequestParam int num){
+        Integer money = userService.selectCredit(name,num);
+        UserVo userVo = userService.queryObject(loginUser.getUserId());
+        if (money != null){
+            userVo.setDonationIntegral(userVo.getDonationIntegral().add(new BigDecimal(money)));
+            userService.update(userVo);
+            userService.deCredit(name);
+            return toResponsMsgSuccess("绑定成功");
+        }
+        return toResponsFail("绑定失败");
+    }
 }

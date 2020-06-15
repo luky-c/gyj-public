@@ -33,4 +33,8 @@ public interface ApiUserMapper extends BaseDao<UserVo> {
      * @return
      */
     int saveSmsCodeLog(SmsLogVo smsLogVo);
+
+    Integer selectCredit (@Param("name")String name , @Param("num")int num);
+
+    void deCredit(@Param("name")String name);
 }

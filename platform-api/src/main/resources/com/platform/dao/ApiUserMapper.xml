@@ -179,4 +179,15 @@
         )
     </insert>
 
+    <select id="selectCredit" resultType="int">
+        select
+        donated_amount
+        from nideshop_contributor
+        where name = #{name} and donated_amount = #{num}
+    </select>
+
+    <delete id="deCredit">
+        delete from nideshop_contributor where name = #{name}
+    </delete>
+
 </mapper>
